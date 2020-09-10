@@ -110,12 +110,12 @@ class Spacing:
             st_dif_mod = self.st_dif % 2
             if in_num_mod == st_dif_mod == 0 and self.st_quotient % 2 != 0:
                 spacing_dict = self.odd_quotient()
-                return f'k{spacing_dict["sts_start_end"]}, m1, *k{spacing_dict["sts_in_rep"]}, m1* ' \
+                spacing_string = f'k{spacing_dict["sts_start_end"]}, m1, *k{spacing_dict["sts_in_rep"]}, m1* ' \
                        f'{spacing_dict["sts_side_rep"]} times, k{spacing_dict["num_mid"]}, m1, *k{spacing_dict["sts_in_rep"]}, m1* ' \
                        f'k{spacing_dict["sts_side_rep"]} times, k{spacing_dict["sts_start_end"]}'
             else:
                 spacing_dict = self.odd_even()
-                return f'k{spacing_dict["sts_start"]}, m1, *k{spacing_dict["sts_mid_rep"]}, m1* {spacing_dict["num_of_mid"]} times, ' \
+                spacing_string = f'k{spacing_dict["sts_start"]}, m1, *k{spacing_dict["sts_mid_rep"]}, m1* {spacing_dict["num_of_mid"]} times, ' \
                        f'k{spacing_dict["sts_end"]}'
         else: # if st_dif is negative, ie. when decreasing sts.
             self.in_num += self.st_dif
@@ -127,7 +127,7 @@ class Spacing:
                 spacing_dict = self.odd_quotient()
                 spacing_dict["sts_in_rep"] -= 1
                 spacing_dict["num_mid"] -= 2
-                return f'k{spacing_dict["sts_start_end"]}, dec 1, *k{spacing_dict["sts_in_rep"]}, dec 1* ' \
+                spacing_string = f'k{spacing_dict["sts_start_end"]}, dec 1, *k{spacing_dict["sts_in_rep"]}, dec 1* ' \
                        f'{spacing_dict["sts_side_rep"]} times, k{spacing_dict["num_mid"]}, dec 1, *k{spacing_dict["sts_in_rep"]}, dec 1* ' \
                        f'k{spacing_dict["sts_side_rep"]} times, k{spacing_dict["sts_start_end"]}'
             else:
@@ -135,15 +135,16 @@ class Spacing:
                 spacing_dict["sts_start"] -= 1
                 spacing_dict["sts_end"] -=1
                 spacing_dict["sts_mid_rep"] -= 1
-                return f'k{spacing_dict["sts_start"]}, dec 1, *k{spacing_dict["sts_mid_rep"]}, dec 1* {spacing_dict["num_of_mid"]} times, ' \
+                spacing_string =  f'k{spacing_dict["sts_start"]}, dec 1, *k{spacing_dict["sts_mid_rep"]}, dec 1* {spacing_dict["num_of_mid"]} times, ' \
                        f'k{spacing_dict["sts_end"]}'
+        return spacing_string
 
     def vertical_spacing(self, num_of_rows):
         if self.st_dif > 0:
             remainder = num_of_rows % self.st_dif
             num_of_inc_rows = int(self.st_dif / 2)
             rows_per_rep = int((num_of_rows - remainder) / num_of_inc_rows)
-            return f'Work {rows_per_rep + 1} rows. Next row: work 1, increase 1, work to 1 st before end, increase 1, work 1. ' \
+            dec_string = f'Work {rows_per_rep + 1} rows. Next row: work 1, increase 1, work to 1 st before end, increase 1, work 1. ' \
                    f'Repeat inc row every {rows_per_rep} rows {num_of_inc_rows - 1} times ({num_of_inc_rows} times ' \
                    f'total). Work {remainder} rows.'
         else:
@@ -151,13 +152,16 @@ class Spacing:
             remainder = num_of_rows % self.st_dif
             num_of_dec_rows = int(self.st_dif / 2)
             rows_per_rep = int((num_of_rows - remainder) / num_of_dec_rows)
-            return f'Work {rows_per_rep + 1} rows. Next row: work 1, decrease 1, work to 1 st before end, decrease, work 1. ' \
+            dec_string = f'Work {rows_per_rep + 1} rows. Next row: work 1, decrease 1, work to 1 st before end, decrease, work 1. ' \
                    f'Repeat dec row every {rows_per_rep} rows {num_of_dec_rows - 1} times ({num_of_dec_rows} times ' \
                    f'total). Work {remainder} rows.'
+        return dec_string
 
-test = Spacing(24, -14)
-print(test.vertical_spacing(30))
-spacing_dict = test.odd_even()
+def new_yarn(yardage1, yardage2, num_of_skeins):
+    return (num_of_skeins * yardage1) / yardage2
+    #return round((num_of_skeins * yardage1) / yardage2, 1)
 
-print(f'k{spacing_dict["sts_start"]}, m1, *k{spacing_dict["sts_mid_rep"]}, m1* {spacing_dict["num_of_mid"]} times, ' \
-                       f'k{spacing_dict["sts_end"]}')
+print(new_yarn(285, 590, 5))
+# test = Spacing(24, -14)
+# print(test.vertical_spacing(30))
+# spacing_dict = test.odd_even()
