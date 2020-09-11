@@ -158,10 +158,33 @@ class Spacing:
         return dec_string
 
 def new_yarn(yardage1, yardage2, num_of_skeins):
-    return (num_of_skeins * yardage1) / yardage2
-    #return round((num_of_skeins * yardage1) / yardage2, 1)
+    """using the differing yardages, returns changed number of balls/skeins needed. 1 decimal.
+    Works with any unit of measurement, but consistency is necessary"""
+    return round((num_of_skeins * yardage1) / yardage2, 1)
 
-print(new_yarn(285, 590, 5))
-# test = Spacing(24, -14)
-# print(test.vertical_spacing(30))
-# spacing_dict = test.odd_even()
+
+def bust_darts(b_s2u_b, f_s2u_b, row_gauge, st_gauge, centre_width, front_st):
+    """returns instructions for knitting bust darts using Ysolda's method. Works only with centrimetres"""
+    #b_s2u_b = the back measurement from top of shoulder to the horizontal line directly under the bust
+    #f_s2u_b = the front measurement from top of shoulder to the horizontal line directly under the bust, i.e including bust
+    dart_depth = b_s2u_b - f_s2u_b
+    if dart_depth < 5:
+        return "Bust darts shallower than 5 centrimetres are not recommended."
+    elif dart_depth >= 5 and dart_depth < 7.5:
+        prelim_num = 2.5 * row_gauge
+        if prelim_num % 2 <= 1:
+            rows_in_dart = int(prelim_num - prelim_num % 2)
+        else:
+            rows_in_dart = int(prelim_num + (1 - (prelim_num % 2 % 1)))
+    else:
+        prelim_num = dart_depth * row_gauge - 5
+        if prelim_num % 2 <= 1:
+            rows_in_dart = int(prelim_num - prelim_num % 2)
+        else:
+            rows_in_dart = int(prelim_num + (1 - (prelim_num % 2 % 1)))
+    num_of_turns = rows_in_dart / 2
+    st_per_dart = front_st - ((centre_width - 5) * st_gauge)
+    st_per_turn = st_gauge / (rows_in_dart / 2)
+
+
+print(bust_darts(105, 100, 3, 4))
