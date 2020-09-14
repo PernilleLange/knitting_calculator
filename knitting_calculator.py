@@ -36,19 +36,6 @@
 
 import math
 
-def shoe_size():
-    """Returns a tuple containing the length and width of the shoe size entered by user"""
-    while True:
-        size = int(input("This calculator accepts European shoe sizes between 18 and 51. Please enter your size here: "))
-        if size < 18 or size > 51:
-            print(size)
-            print("Sorry, that is not a valid size. Please use numbers to enter a European size between 18 and 51.")
-            continue
-        else:
-            length = float((size - 2) / 1.5)
-            width = float(length * 1.05)
-            return (length, width)
-
 def stitch_gauge():
     '''returns stitch gauge'''
     while True:
@@ -164,12 +151,12 @@ def new_yarn(yardage1, yardage2, num_of_skeins):
 
 
 def bust_darts(b_s2u_b, f_s2u_b, row_gauge, st_gauge, centre_width, front_st):
-    """returns instructions for knitting bust darts using Ysolda's method. Works only with centrimetres"""
+    """returns instructions for knitting bust darts using Ysolda's method. Works only with centimetres"""
     #b_s2u_b = the back measurement from top of shoulder to the horizontal line directly under the bust
     #f_s2u_b = the front measurement from top of shoulder to the horizontal line directly under the bust, i.e including bust
     dart_depth = b_s2u_b - f_s2u_b
     if dart_depth < 5:
-        return "Bust darts shallower than 5 centrimetres are not recommended."
+        return "Bust darts shallower than 5 centimetres are not recommended."
     elif dart_depth >= 5 and dart_depth < 7.5:
         prelim_num = 2.5 * row_gauge
         if prelim_num % 2 <= 1:
@@ -186,5 +173,56 @@ def bust_darts(b_s2u_b, f_s2u_b, row_gauge, st_gauge, centre_width, front_st):
     st_per_dart = front_st - ((centre_width - 5) * st_gauge)
     st_per_turn = st_gauge / (rows_in_dart / 2)
 
+def shoe_size():
+    """Returns a tuple containing the length and width of the shoe size entered by user"""
+    while True:
+        size = int(input("This calculator accepts European shoe sizes between 18 and 51. Please enter your size here: "))
+        if size < 18 or size > 51:
+            print(size)
+            print("Sorry, that is not a valid size. Please use numbers to enter a European size between 18 and 51.")
+            continue
+        else:
+            length = float((size - 2) / 1.5)
+            circumf = float(length * 1.05)
+            return (length, circumf)
 
-print(bust_darts(105, 100, 3, 4))
+class Socks:
+    def __init__(self, length, circumf, row_gauge, st_gauge):
+        self.length = length
+        self.circumf = circumf
+        self.row_gauge = row_gauge
+        self.st_gauge = st_gauge
+        prelim_leg = self.circumf * self.st_gauge
+        self.st_in_leg = int(prelim_leg - (prelim_leg % 4))
+        self.half_leg = int(self.st_in_leg / 2)
+        self.mid = int(self.st_in_leg * 0.14 - ((self.st_in_leg * 0.14) % 2))
+        self.toe_length = int(self.length * 0.2)
+        self.rows_in_leg = int((self.length - self.toe_length) * row_gauge)
+
+    def stock_socks(self):
+        return f'LEG: Cast on {self.st_in_leg} stitches and distribute evenly on 4 double pointed needles. ' \
+               f'Join stitches, being careful not to twist. ' \
+               f'*K1, P1* to end. Repeat rib row until work measures 1.5 centimetres. ' \
+               f'Change to stockinette (k all sts) and work until you have knitted {self.rows_in_leg} rows from rib, or ' \
+               f'until work has desired length for leg. ' \
+               f'HEEL: The short-row heel is worked over {self.half_leg} stitches. When the instructions state "knit to end", ' \
+               f'it is the end of these stitches. Ie. if you are working on 4 DPNs, knit to end of second needle. ' \
+               f'K to 1 st before end, W&T. P to 1 st before end, W&T. ' \
+               f'*K to 1 st before previously wrapped st, W&T. P to 1 st before previously wrapped st, W&T.* ' \
+               f'Repeat from * to * until you have {self.mid} unwrapped sts left in the middle. ' \
+               f'Work one round across all sts (including sts on hold), working wraps and wrapped sts together. ' \
+               f'K until end of previously unwrapped sts in middle of heel, W&T. ' \
+               f'P until end of previously unwrapped sts in middle of heel, W&T. ' \
+               f'*K to wrapped st, work st together with wrap, W&T. P to wrapped st, work st together with wrap, W&T* ' \
+               f'Repeat from * to * until all sts on heel have been worked and you have 1 wrapped st on either side of heel. ' \
+               f'Knit one round where wraps and wrapped sts are worked together. ' \
+               f'FOOT: Work in stockinette (k all sts) until you have worked {self.rows_in_leg} rows since last heel row, ' \
+               f'or until work from tip of heel measures {self.toe_length} centimetres less than desired length ' \
+               f'TOE: Row 1: *K1, K2tog, k {self.half_leg - 6}, ssk, k1*. Repeat from * to *. ' \
+               f'Row 2: K all sts. Repeat rows 1 & 2 until {self.mid * 2} sts are remaining. ' \
+               f'Graft remaining sts together using kitchener st.'
+
+
+
+socks = Socks(10.67,11.2,1,2)
+print(socks.stock_socks())
