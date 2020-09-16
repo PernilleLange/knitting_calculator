@@ -63,6 +63,9 @@ class Spacing:
         self.st_dif = st_dif
         self.st_quotient = self.in_num / self.st_dif
 
+    def __repr__(self):
+        return f'Spacing({self.in_num, self.st_dif})'
+
     def odd_even(self):
         """If increasing, use this unless your initial number and your stitch difference both are even and (in_num / st_dif) is uneven.
             If decreasing, use this unless (in_num - st_dif) and st_dif are both even and and ((in_num - st_dif)/ st_dif) is uneven"""
@@ -185,6 +188,7 @@ def shoe_size():
             length = float((size - 2) / 1.5)
             circumf = float(length * 1.05)
             return (length, circumf)
+    return
 
 class Socks:
     def __init__(self, length, circumf, row_gauge, st_gauge):
@@ -198,6 +202,9 @@ class Socks:
         self.mid = int(self.st_in_leg * 0.14 - ((self.st_in_leg * 0.14) % 2))
         self.toe_length = int(self.length * 0.2)
         self.rows_in_leg = int((self.length - self.toe_length) * row_gauge)
+
+    def __repr__(self):
+        return f'Socks({self.length}, {self.circumf}, {self.row_gauge}, {self.st_gauge})'
 
     def stock_socks(self):
         return f'LEG: Cast on {self.st_in_leg} stitches and distribute evenly on 4 double pointed needles. ' \
@@ -217,6 +224,30 @@ class Socks:
                f'Repeat from * to * until all sts on heel have been worked and you have 1 wrapped st on either side of heel. ' \
                f'Knit one round where wraps and wrapped sts are worked together. ' \
                f'FOOT: Work in stockinette (k all sts) until you have worked {self.rows_in_leg} rows since last heel row, ' \
+               f'or until work from tip of heel measures {self.toe_length} centimetres less than desired length ' \
+               f'TOE: Row 1: *K1, K2tog, k {self.half_leg - 6}, ssk, k1*. Repeat from * to *. ' \
+               f'Row 2: K all sts. Repeat rows 1 & 2 until {self.mid * 2} sts are remaining. ' \
+               f'Graft remaining sts together using kitchener st.'
+
+    def rib_socks(self):
+        return f'LEG: Cast on {self.st_in_leg} stitches and distribute evenly on 4 double pointed needles. ' \
+               f'Join stitches, being careful not to twist. ' \
+               f'*K2, P2* to end. Repeat rib row until until you have knitted {self.rows_in_leg}, or ' \
+               f'until work has desired length for leg. ' \
+               f'HEEL: The short-row heel is worked over {self.half_leg} stitches. When the instructions state "knit to end", ' \
+               f'it is the end of these stitches. Ie. if you are working on 4 DPNs, knit to end of second needle. ' \
+               f'K to 1 st before end, W&T. P to 1 st before end, W&T. ' \
+               f'*K to 1 st before previously wrapped st, W&T. P to 1 st before previously wrapped st, W&T.* ' \
+               f'Repeat from * to * until you have {self.mid} unwrapped sts left in the middle. ' \
+               f'Work one round across all sts, working wraps and wrapped sts together ' \
+               f'and working held sts in rib as established.' \
+               f'K until end of previously unwrapped sts in middle of heel, W&T. ' \
+               f'P until end of previously unwrapped sts in middle of heel, W&T. ' \
+               f'*K to wrapped st, work st together with wrap, W&T. P to wrapped st, work st together with wrap, W&T* ' \
+               f'Repeat from * to * until all sts on heel have been worked and you have 1 wrapped st on either side of heel. ' \
+               f'Work one round where wraps and wrapped sts are worked together and held sts are worked in rib as established. ' \
+               f'FOOT: Work bottom of foot in stockinette (k all sts) and top of foot in rib ' \
+               f'until you have worked {self.rows_in_leg} rows since last heel row, ' \
                f'or until work from tip of heel measures {self.toe_length} centimetres less than desired length ' \
                f'TOE: Row 1: *K1, K2tog, k {self.half_leg - 6}, ssk, k1*. Repeat from * to *. ' \
                f'Row 2: K all sts. Repeat rows 1 & 2 until {self.mid * 2} sts are remaining. ' \
