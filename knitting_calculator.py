@@ -152,30 +152,6 @@ def new_yarn(yardage1, yardage2, num_of_skeins):
     Works with any unit of measurement, but consistency is necessary"""
     return round((num_of_skeins * yardage1) / yardage2, 1)
 
-
-def bust_darts(b_s2u_b, f_s2u_b, row_gauge, st_gauge, centre_width, front_st):
-    """returns instructions for knitting bust darts using Ysolda's method. Works only with centimetres"""
-    #b_s2u_b = the back measurement from top of shoulder to the horizontal line directly under the bust
-    #f_s2u_b = the front measurement from top of shoulder to the horizontal line directly under the bust, i.e including bust
-    dart_depth = b_s2u_b - f_s2u_b
-    if dart_depth < 5:
-        return "Bust darts shallower than 5 centimetres are not recommended."
-    elif dart_depth >= 5 and dart_depth < 7.5:
-        prelim_num = 2.5 * row_gauge
-        if prelim_num % 2 <= 1:
-            rows_in_dart = int(prelim_num - prelim_num % 2)
-        else:
-            rows_in_dart = int(prelim_num + (1 - (prelim_num % 2 % 1)))
-    else:
-        prelim_num = dart_depth * row_gauge - 5
-        if prelim_num % 2 <= 1:
-            rows_in_dart = int(prelim_num - prelim_num % 2)
-        else:
-            rows_in_dart = int(prelim_num + (1 - (prelim_num % 2 % 1)))
-    num_of_turns = rows_in_dart / 2
-    st_per_dart = front_st - ((centre_width - 5) * st_gauge)
-    st_per_turn = st_gauge / (rows_in_dart / 2)
-
 def shoe_size():
     """Returns a tuple containing the length and width of the shoe size entered by user"""
     while True:
@@ -254,6 +230,50 @@ class Socks:
                f'Graft remaining sts together using kitchener st.'
 
 
+class BustDarts:
+    def __init__(self, b_s2u_b, f_s2u_b, row_gauge, st_gauge, centre_width, front_st):
+        """returns instructions for knitting bust darts using Ysolda's method. Works only with centimetres"""
+        #b_s2u_b = the back measurement from top of shoulder to the horizontal line directly under the bust
+        #f_s2u_b = the front measurement from top of shoulder to the horizontal line directly under the bust, i.e including bust
+        self.b_s2u_b = b_s2u_b
+        self.f_s2u_b = f_s2u_b
+        self.row_gauge = row_gauge
+        self.st_gauge = st_gauge
+        self.centre_width = centre_width
+        self.front_st = front_st
+        self.dart_depth = self.f_s2u_b - self.b_s2u_b
+        #dart depths shorter than 5 centimetres are not recommended
+        if self.dart_depth < 5:
+            raise ValueError
+        elif self.dart_depth >= 5 and self.dart_depth < 7.5:
+            prelim_rows_in_dart = 2.5 * self.row_gauge
+        else:
+            prelim_rows_in_dart = self.dart_depth * self.row_gauge - 5
+        if prelim_rows_in_dart % 2 <= 1:
+            self.rows_in_dart = int(prelim_rows_in_dart - prelim_rows_in_dart % 2)
+        else:
+            self.rows_in_dart = int(prelim_rows_in_dart + (1 - (prelim_rows_in_dart % 2 % 1)))
+        self.num_of_turns = int(self.rows_in_dart / 2)
+        self.st_per_dart = int((self.front_st - ((self.centre_width + 5) * self.st_gauge)) / 2)
+        self.st_per_turn = int(self.st_per_dart / self.num_of_turns)
 
-socks = Socks(10.67,11.2,1,2)
-print(socks.stock_socks())
+    def top_down(self):
+        '''To be used for sweaters worked from the top down.'''
+        return f'Dart is worked over {self.rows_in_dart} rows: \n' \
+               f'K to {self.st_per_dart} before end, W&T. P to {self.st_per_dart} before end, W&T.\n' \
+               f'*K to wrapped st, work wrap together with st, k {self.st_per_turn - 1}, W&T.\n' \
+               f'P to wrapped st, work wrap together with st, k {self.st_per_turn - 1}, W&T.*\n' \
+               f'Repeat from * to * {self.num_of_turns - 2} times ({self.num_of_turns - 1} times total).\n' \
+               f'On the first row after having completed all the dart rows, work all wraps together with wrapped st. \n'
+
+    def bottom_up(self):
+        '''To be used for sweaters worked from the bottom up.'''
+        return f'Dart is worked over {self.rows_in_dart} rows: \n' \
+               f'K to 1 st before end, W&T. P to 1 st before end, W%T.\n' \
+               f'*K to {self.st_per_turn - 1} before last wrapped st, W&T. \n' \
+               f'P to {self.st_per_turn - 1} before last wrapped st, W&T*.\n' \
+               f'Repeat from * to * {self.num_of_turns - 2} times ({self.num_of_turns - 1} times total).\n' \
+               f'On the first row after having completed all the dart rows, work remaining wraps together with wrapped st. \n'
+
+bust_darts = BustDarts(20, 25, 4, 2.8, 15, 100)
+print(bust_darts.top_down())
