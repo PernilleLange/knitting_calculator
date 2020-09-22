@@ -255,25 +255,30 @@ class BustDarts:
             self.rows_in_dart = int(prelim_rows_in_dart + (1 - (prelim_rows_in_dart % 2 % 1)))
         self.num_of_turns = int(self.rows_in_dart / 2)
         self.st_per_dart = int((self.front_st - ((self.centre_width + 5) * self.st_gauge)) / 2)
-        self.st_per_turn = int(self.st_per_dart / self.num_of_turns)
+        self.st_per_turn = int((self.st_per_dart - (self.st_per_dart % self.num_of_turns)) / self.num_of_turns)
+        self.st_in_point = int(self.st_per_turn + (self.st_per_dart % self.num_of_turns))
 
     def top_down(self):
         '''To be used for sweaters worked from the top down.'''
         return f'Dart is worked over {self.rows_in_dart} rows: \n' \
                f'K to {self.st_per_dart} before end, W&T. P to {self.st_per_dart} before end, W&T.\n' \
                f'*K to wrapped st, work wrap together with st, k {self.st_per_turn - 1}, W&T.\n' \
-               f'P to wrapped st, work wrap together with st, k {self.st_per_turn - 1}, W&T.*\n' \
-               f'Repeat from * to * {self.num_of_turns - 2} times ({self.num_of_turns - 1} times total).\n' \
+               f'P to wrapped st, work wrap together with st, p {self.st_per_turn - 1}, W&T.*\n' \
+               f'Repeat from * to * {self.num_of_turns - 3} times ({self.num_of_turns - 1} times total).\n' \
+               f'K to wrapped st, work wrap together with st, k to 1 st before end, W&T.\n' \
+               f'P to wrapped st, work wrap together with st, p to 1 st before end, W&T.\n' \
                f'On the first row after having completed all the dart rows, work all wraps together with wrapped st. \n'
 
     def bottom_up(self):
         '''To be used for sweaters worked from the bottom up.'''
         return f'Dart is worked over {self.rows_in_dart} rows: \n' \
                f'K to 1 st before end, W&T. P to 1 st before end, W%T.\n' \
+               f'K to {self.st_in_point - 1} before last wrapped st, W&T. \n' \
+               f'P to {self.st_in_point - 1} before last wrapped st, W&T\n' \
                f'*K to {self.st_per_turn - 1} before last wrapped st, W&T. \n' \
                f'P to {self.st_per_turn - 1} before last wrapped st, W&T*.\n' \
-               f'Repeat from * to * {self.num_of_turns - 2} times ({self.num_of_turns - 1} times total).\n' \
+               f'Repeat from * to * {self.num_of_turns - 3} times ({self.num_of_turns - 2} times total).\n' \
                f'On the first row after having completed all the dart rows, work remaining wraps together with wrapped st. \n'
 
 bust_darts = BustDarts(20, 25, 4, 2.8, 15, 100)
-print(bust_darts.top_down())
+print(bust_darts.bottom_up())
