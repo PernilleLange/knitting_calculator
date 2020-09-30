@@ -167,7 +167,7 @@ def shoe_size():
     return
 
 class Socks:
-    def __init__(self, length, circumf, row_gauge, st_gauge):
+    def __init__(self, st_gauge, row_gauge, length, circumf,):
         self.length = length
         self.circumf = circumf
         self.row_gauge = row_gauge
@@ -183,52 +183,51 @@ class Socks:
         return f'Socks({self.length}, {self.circumf}, {self.row_gauge}, {self.st_gauge})'
 
     def stock_socks(self):
-        return f'LEG: Cast on {self.st_in_leg} stitches and distribute evenly on 4 double pointed needles. ' \
-               f'Join stitches, being careful not to twist. ' \
-               f'*K1, P1* to end. Repeat rib row until work measures 1.5 centimetres. ' \
-               f'Change to stockinette (k all sts) and work until you have knitted {self.rows_in_leg} rows from rib, or ' \
-               f'until work has desired length for leg. ' \
-               f'HEEL: The short-row heel is worked over {self.half_leg} stitches. When the instructions state "knit to end", ' \
-               f'it is the end of these stitches. Ie. if you are working on 4 DPNs, knit to end of second needle. ' \
-               f'K to 1 st before end, W&T. P to 1 st before end, W&T. ' \
-               f'*K to 1 st before previously wrapped st, W&T. P to 1 st before previously wrapped st, W&T.* ' \
-               f'Repeat from * to * until you have {self.mid} unwrapped sts left in the middle. ' \
-               f'Work one round across all sts (including sts on hold), working wraps and wrapped sts together. ' \
-               f'K until end of previously unwrapped sts in middle of heel, W&T. ' \
-               f'P until end of previously unwrapped sts in middle of heel, W&T. ' \
-               f'*K to wrapped st, work st together with wrap, W&T. P to wrapped st, work st together with wrap, W&T* ' \
-               f'Repeat from * to * until all sts on heel have been worked and you have 1 wrapped st on either side of heel. ' \
-               f'Knit one round where wraps and wrapped sts are worked together. ' \
-               f'FOOT: Work in stockinette (k all sts) until you have worked {self.rows_in_leg} rows since last heel row, ' \
-               f'or until work from tip of heel measures {self.toe_length} centimetres less than desired length ' \
-               f'TOE: Row 1: *K1, K2tog, k {self.half_leg - 6}, ssk, k1*. Repeat from * to *. ' \
-               f'Row 2: K all sts. Repeat rows 1 & 2 until {self.mid * 2} sts are remaining. ' \
+        return f'LEG: Cast on {self.st_in_leg} stitches and distribute evenly on 4 double pointed needles. \n' \
+               f'Join stitches, being careful not to twist. \n' \
+               f'*K1, P1* to end. Repeat rib row until work measures 1.5 centimetres. \n' \
+               f'Change to stockinette (k all sts) and work until you have knitted {self.rows_in_leg} rows from rib, \n' \
+               f'or until work has desired length for leg. \n' \
+               f'HEEL: The short-row heel is worked over {self.half_leg} stitches. When the instructions state "knit to end", \n' \
+               f'it is the end of these stitches. Ie. if you are working on 4 DPNs, knit to end of second needle. \n' \
+               f'K to 1 st before end, W&T. P to 1 st before end, W&T. \n' \
+               f'*K to 1 st before previously wrapped st, W&T. P to 1 st before previously wrapped st, W&T.* \n' \
+               f'Repeat from * to * until you have {self.mid} unwrapped sts left in the middle. \n' \
+               f'Work one round across all sts (including sts on hold), working wraps and wrapped sts together. \n' \
+               f'K until end of previously unwrapped sts in middle of heel, W&T.\n' \
+               f'P until end of previously unwrapped sts in middle of heel, W&T. \n' \
+               f'*K to wrapped st, work st together with wrap, W&T. P to wrapped st, work st together with wrap, W&T* \n' \
+               f'Repeat from * to * until all sts on heel have been worked and you have 1 wrapped st on either side of heel.\n' \
+               f'Knit one round where wraps and wrapped sts are worked together.\n' \
+               f'FOOT: Work in stockinette (k all sts) until you have worked {self.rows_in_leg} rows since last heel row,\n' \
+               f'or until work from tip of heel measures {self.toe_length} centimetres less than desired length \n' \
+               f'TOE: Row 1: *K1, K2tog, k {self.half_leg - 6}, ssk, k1*. Repeat from * to *. \n' \
+               f'Row 2: K all sts. Repeat rows 1 & 2 until {self.mid * 2} sts are remaining. \n' \
                f'Graft remaining sts together using kitchener st.'
 
     def rib_socks(self):
-        return f'LEG: Cast on {self.st_in_leg} stitches and distribute evenly on 4 double pointed needles. ' \
-               f'Join stitches, being careful not to twist. ' \
-               f'*K2, P2* to end. Repeat rib row until until you have knitted {self.rows_in_leg}, or ' \
-               f'until work has desired length for leg. ' \
-               f'HEEL: The short-row heel is worked over {self.half_leg} stitches. When the instructions state "knit to end", ' \
-               f'it is the end of these stitches. Ie. if you are working on 4 DPNs, knit to end of second needle. ' \
-               f'K to 1 st before end, W&T. P to 1 st before end, W&T. ' \
-               f'*K to 1 st before previously wrapped st, W&T. P to 1 st before previously wrapped st, W&T.* ' \
-               f'Repeat from * to * until you have {self.mid} unwrapped sts left in the middle. ' \
-               f'Work one round across all sts, working wraps and wrapped sts together ' \
-               f'and working held sts in rib as established.' \
-               f'K until end of previously unwrapped sts in middle of heel, W&T. ' \
-               f'P until end of previously unwrapped sts in middle of heel, W&T. ' \
-               f'*K to wrapped st, work st together with wrap, W&T. P to wrapped st, work st together with wrap, W&T* ' \
-               f'Repeat from * to * until all sts on heel have been worked and you have 1 wrapped st on either side of heel. ' \
-               f'Work one round where wraps and wrapped sts are worked together and held sts are worked in rib as established. ' \
-               f'FOOT: Work bottom of foot in stockinette (k all sts) and top of foot in rib ' \
-               f'until you have worked {self.rows_in_leg} rows since last heel row, ' \
-               f'or until work from tip of heel measures {self.toe_length} centimetres less than desired length ' \
-               f'TOE: Row 1: *K1, K2tog, k {self.half_leg - 6}, ssk, k1*. Repeat from * to *. ' \
-               f'Row 2: K all sts. Repeat rows 1 & 2 until {self.mid * 2} sts are remaining. ' \
+        return f'LEG: Cast on {self.st_in_leg} stitches and distribute evenly on 4 double pointed needles. \n' \
+               f'Join stitches, being careful not to twist. \n' \
+               f'*K2, P2* to end. Repeat rib row until until you have knitted {self.rows_in_leg} rows, or ' \
+               f'until work has desired length for leg.\n' \
+               f'HEEL: The short-row heel is worked over {self.half_leg} stitches. When the instructions state "knit to end", \n' \
+               f'it is the end of these stitches. Ie. if you are working on 4 DPNs, knit to end of second needle. \n' \
+               f'K to 1 st before end, W&T. P to 1 st before end, W&T. \n' \
+               f'*K to 1 st before previously wrapped st, W&T. P to 1 st before previously wrapped st, W&T.* \n' \
+               f'Repeat from * to * until you have {self.mid} unwrapped sts left in the middle. \n' \
+               f'Work one round across all sts, working wraps and wrapped sts together \n' \
+               f'and working held sts in rib as established.\n' \
+               f'K until end of previously unwrapped sts in middle of heel, W&T. \n' \
+               f'P until end of previously unwrapped sts in middle of heel, W&T. \n' \
+               f'*K to wrapped st, work st together with wrap, W&T. P to wrapped st, work st together with wrap, W&T* \n' \
+               f'Repeat from * to * until all sts on heel have been worked and you have 1 wrapped st on either side of heel. \n' \
+               f'Work one round where wraps and wrapped sts are worked together and held sts are worked in rib as established. \n' \
+               f'FOOT: Work bottom of foot in stockinette (k all sts) and top of foot in rib \n' \
+               f'until you have worked {self.rows_in_leg} rows since last heel row,\n' \
+               f'or until work from tip of heel measures {self.toe_length} centimetres less than desired length \n' \
+               f'TOE: Row 1: *K1, K2tog, k {self.half_leg - 6}, ssk, k1*. Repeat from * to *. \n' \
+               f'Row 2: K all sts. Repeat rows 1 & 2 until {self.mid * 2} sts are remaining.\n' \
                f'Graft remaining sts together using kitchener st.'
-
 
 class BustDarts:
     def __init__(self, b_s2u_b, f_s2u_b, row_gauge, st_gauge, centre_width, front_st):
@@ -280,5 +279,70 @@ class BustDarts:
                f'Repeat from * to * {self.num_of_turns - 3} times ({self.num_of_turns - 2} times total).\n' \
                f'On the first row after having completed all the dart rows, work remaining wraps together with wrapped st. \n'
 
-bust_darts = BustDarts(20, 25, 4, 2.8, 15, 100)
-print(bust_darts.bottom_up())
+def run_socks():
+    while True:
+        try:
+            sock_answer = input("Do you want to knit ribbed socks (R) or stockinette socks (S)?")
+            if sock_answer.upper() == 'R':
+                print("We're going to need your gauge for that! "
+                      "Please make a gauge swatch in your preferred yarn "
+                      "if you have not already done so.")
+                user_stitch_gauge = stitch_gauge()
+                user_row_gauge = row_gauge()
+                length, circum = shoe_size()
+                socks = Socks(user_stitch_gauge, user_row_gauge, length, circum)
+                print(socks.rib_socks())
+                break
+            elif sock_answer.upper() == 'S':
+                print("We're going to need your gauge for that! "
+                      "Please make a gauge swatch in your preferred yarn "
+                      "if you have not already done so.")
+                user_stitch_gauge = stitch_gauge()
+                user_row_gauge = row_gauge()
+                length, circum = shoe_size()
+                socks = Socks(user_stitch_gauge, user_row_gauge, length, circum)
+                print(socks.stock_socks())
+                break
+            else:
+                raise Exception
+        except:
+            print('Please choose either R or S.')
+            continue
+
+def run_new_yardage():
+    while True:
+        try:
+            num_of_skeins = int(input("How many skeins/balls of the old yarn do you need?"))
+            old_len = int(input("What is the yardage/meterage (yards or meters per ball/skein) "
+                                "of the original yarn? "))
+            new_len = int(input("What is the yardage/meterage (yards or meters per ball/skein) "
+                                "of the new yarn? "))
+            print(f"You'll need {new_yarn(old_len, new_len, num_of_skeins)} "
+                  f"balls/skeins of your new yarn.")
+            break
+        except:
+            print('Please only use numbers for your answers.')
+            continue
+
+while True:
+    try:
+        start_answer = input("What do you want to do?\n"
+              "1) Calculate a sock pattern.\n"
+              "2) Calculate bust darts.\n"
+              "3) Calculate how much yarn you'll need when switching from the yarn in your pattern.\n"
+              "4) Space increases or decreases evenly.")
+
+        if start_answer == '1':
+            run_socks()
+        elif start_answer == '2':
+            print("Nah, let's not do that")
+        elif start_answer == '3':
+            run_new_yardage()
+        elif start_answer == '4':
+            print("Let's do that tomorrow, don't you think?")
+        else:
+            raise Exception
+    except:
+        print('Please choose a number between 1 and 4.')
+        continue
+    break
