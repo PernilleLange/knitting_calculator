@@ -155,9 +155,8 @@ def new_yarn(yardage1, yardage2, num_of_skeins):
 def shoe_size():
     """Returns a tuple containing the length and width of the shoe size entered by user"""
     while True:
-        size = int(input("This calculator accepts European shoe sizes between 18 and 51. Please enter your size here: "))
+        size = int(input("This calculator accepts European shoe sizes between 18 and 51. Please enter your shoe size here: "))
         if size < 18 or size > 51:
-            print(size)
             print("Sorry, that is not a valid size. Please use numbers to enter a European size between 18 and 51.")
             continue
         else:
@@ -230,7 +229,7 @@ class Socks:
                f'Graft remaining sts together using kitchener st.'
 
 class BustDarts:
-    def __init__(self, b_s2u_b, f_s2u_b, row_gauge, st_gauge, centre_width, front_st):
+    def __init__(self, b_s2u_b, f_s2u_b, centre_width, front_st, st_gauge, row_gauge):
         """returns instructions for knitting bust darts using Ysolda's method. Works only with centimetres"""
         #b_s2u_b = the back measurement from top of shoulder to the horizontal line directly under the bust
         #f_s2u_b = the front measurement from top of shoulder to the horizontal line directly under the bust, i.e including bust
@@ -257,6 +256,11 @@ class BustDarts:
         self.st_per_turn = int((self.st_per_dart - (self.st_per_dart % self.num_of_turns)) / self.num_of_turns)
         self.st_in_point = int(self.st_per_turn + (self.st_per_dart % self.num_of_turns))
 
+    def __repr__(self):
+        '''Returns a string with the input variables'''
+        return f'BustDarts(b_s2u_b={self.b_s2u_b}, f_s2u_b={self.f_s2u_b}, row_gauge={self.row_gauge},' \
+               f' st_gauge={self.st_gauge}, centre_width={self.centre_width}, front_st={self.front_st})'
+
     def top_down(self):
         '''To be used for sweaters worked from the top down.'''
         return f'Dart is worked over {self.rows_in_dart} rows: \n' \
@@ -279,10 +283,77 @@ class BustDarts:
                f'Repeat from * to * {self.num_of_turns - 3} times ({self.num_of_turns - 2} times total).\n' \
                f'On the first row after having completed all the dart rows, work remaining wraps together with wrapped st. \n'
 
+def prompt_for_int(question):
+    while True:
+        try:
+            return int(input(question))
+        except:
+            print("Please enter an integer.")
+
+def prompt_for_float(question):
+    while True:
+        try:
+            return int(input(question))
+        except:
+            print("Please enter a number.")
+
+def dart_input():
+    print("When taking your measurements, try to wear the bra you plan to wear with the finished garment, "
+          "or at least one with a similar fit. \nIf that means no bra, that's cool too! ")
+    back_sh2bu = prompt_for_float("The first measurement we need is the back shoulder to under bust.\n"
+                       "On your back, measure from the top of your shoulder to right under your bust\n"
+                       "– where the bottom of your bra band is or would be. How many centimeters is that? ")
+    front_sh2bu = prompt_for_float("The next measurement we need is the front shoulder to under bust.\n"
+                              "On your front, measure from the top of your shoulder to right under your bust "
+                              "(your measuring tape should follow your boob curve) \n"
+                              "– where the bottom of your bra band is or would be. How many centimeters is that? ")
+    if front_sh2bu-back_sh2bu < 5:
+        print("When the difference between the front and back shoulder to under bust measurement is less than 5 centimeters,\n"
+              "bust darts aren't a great choice – consider adding extra stitches in the sides instead?")
+        return
+    cen_width = prompt_for_float("We'll also need a centre width. Please measure across your bust between the most prominent points "
+                            "(that'll probably be your nipples). \nHow many centimeters is that? ")
+    front_sts = prompt_for_int("How many stitches are on the front half of your sweater? ")
+
+    return (back_sh2bu, front_sh2bu, cen_width, front_sts)
+
+
+def run_bust_darts():
+    while True:
+        try:
+            dart_answer = input("Bust darts are worked differently depending on the direction of your knitting.\n"
+                                "Are you working from the top down (T) or from the bottom up (B)? ")
+            if dart_answer.upper() == 'T':
+                print(
+                    "Cool! I love me some top-down knitting. It's so nice to be able to try things on as you go along.\n"
+                    "We're going to need your measurements and a gauge swatch.")
+                back_sh2bu, front_sh2bu, cen_width, front_sts = dart_input()
+                stgauge = stitch_gauge()
+                rgauge = row_gauge()
+                darts = BustDarts(back_sh2bu, front_sh2bu, cen_width, front_sts, stgauge, rgauge)
+                print(darts.top_down())
+                break
+            elif dart_answer.upper() == 'B':
+                print("Awesome! Bottom-up knitting is a classic for a reason!\n"
+                      "We're going to need your measurements and a gauge swatch.")
+                back_sh2bu, front_sh2bu, cen_width, front_sts = dart_input()
+                stgauge = stitch_gauge()
+                rgauge = row_gauge()
+                darts = BustDarts(back_sh2bu, front_sh2bu, cen_width, front_sts, stgauge, rgauge)
+                print(darts.top_down())
+                break
+            else:
+                raise Exception
+        except:
+            print("Please choose either T or B")
+            continue
+
+
+
 def run_socks():
     while True:
         try:
-            sock_answer = input("Do you want to knit ribbed socks (R) or stockinette socks (S)?")
+            sock_answer = input("Do you want to knit ribbed socks (R) or stockinette socks (S)? ")
             if sock_answer.upper() == 'R':
                 print("We're going to need your gauge for that! "
                       "Please make a gauge swatch in your preferred yarn "
@@ -312,7 +383,7 @@ def run_socks():
 def run_new_yardage():
     while True:
         try:
-            num_of_skeins = int(input("How many skeins/balls of the old yarn do you need?"))
+            num_of_skeins = int(input("How many skeins/balls of the old yarn do you need? "))
             old_len = int(input("What is the yardage/meterage (yards or meters per ball/skein) "
                                 "of the original yarn? "))
             new_len = int(input("What is the yardage/meterage (yards or meters per ball/skein) "
@@ -330,12 +401,12 @@ while True:
               "1) Calculate a sock pattern.\n"
               "2) Calculate bust darts.\n"
               "3) Calculate how much yarn you'll need when switching from the yarn in your pattern.\n"
-              "4) Space increases or decreases evenly.")
+              "4) Space increases or decreases evenly. ")
 
         if start_answer == '1':
             run_socks()
         elif start_answer == '2':
-            print("Nah, let's not do that")
+            run_bust_darts()
         elif start_answer == '3':
             run_new_yardage()
         elif start_answer == '4':
