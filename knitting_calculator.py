@@ -1,40 +1,19 @@
-# Det jeg gerne vil, er at lave en strikkeregnemaskine, der kan
-# 1. Udregne fordeling af udtagning/indtagning på én pind. **
-# 2. Udregne fordeling af udtagning/indtagning over flere pinde. **
-# 3. Udregne brystindsnit baseret på Ysoldas metode. **
-# 4. Udregne nyt antal nøgler, hvis man ønsker at skifte garn ** – måske med Ravelrys API? *
-# 5. Give en strømpeopskrift enten i glatstrik eller med ribbet top,
-#    baseret på skostørrelse og strikkefasthed *
-# ** er mest væsentligt, * er mere nice to have.
-# Scriptet skal byde velkommen og så spørge, hvad man ønsker at gøre.
-# Svaret skal tages som input og så lede over i et af fem subscripts.
-# De tre sidste subscripts kræver en strikkefasthed,
-# og det kan derfor måske være en god idé at lave en klasse med dette?
-# Skostørrelse kan bruges til en dictionary med længde i cm.
-# Alle fem subscripts skal give mulighed for at lave en .pdf-fil, så de kan printes.
-# Subscript 1 skal tage input: Strikker du rundt eller fladt?
-# Hvor mange masker har du? Hvor mange masker skal du ende med?
-# Hvis slutantallet er større -> tillægsfunktion
-# Hvis slutantallet er mindre -> fratrækningsfunktion
-# Og så give instruktioner til, hvordan dette skal gøres og tilbyde, om det skal laves til en .pdf-fil.
-# Hvis ja, lægges filen på skrivebordet eller der spørges, hvor den skal gemmes.
-# Subscript 2 gør det samme, men over flere pinde. Udregningen kan være den samme,
-# men outputtet skal være anderledes.
-# skal tage input. Hvad er din strikkefasthed?
-# Vil du tillægge eller fjerne vidde? Hvor mange cm starter du med?
-# Hvor mange cm vil du lægge til / trække fra? Over hvor mange cm skal det gøres?
-# Og så give instruktioner til, hvordan dette skal gøres og tilbyde, om det skal laves til en .pdf-fil.
-# Subscript 4 skal spørge enten, hvor mange nøgler, der skal bruges af det oprindelige garn
-# og hvor mange meter, der er pr. nøgle (eller find denne information med Ravelrys API) og så spørge,
-# hvor mange meter, der er pr. nøgle på det garn, man erstatter med (eller find denne information med
-# Ravelrys API). Så skal output være antallet af nøgler, der skal bruges af det nye garn.
-# Subscript 5 skal tage input. Hvad er din strikkefasthed?
-# Vil du lave glatstrikkede strømper eller sokker med ribstrik på toppen?
-# Hvilken størrelse vil du lave? Hvor langt skal skaftet være?
-# Til sidst printes instruktioner og .pdf-fil tilbydes.
-# Til sidst spørges, om man ønsker at gøre mere. Hvis ja, køres programmet igen, hvis nej, tak for i dag.
 
 import math
+
+def prompt_for_int(question):
+    while True:
+        try:
+            return int(input(question))
+        except:
+            print("Please enter an integer.")
+
+def prompt_for_float(question):
+    while True:
+        try:
+            return int(input(question))
+        except:
+            print("Please enter a number.")
 
 def stitch_gauge():
     '''returns stitch gauge'''
@@ -58,7 +37,7 @@ def row_gauge():
 
 class Spacing:
     """Uses inital number and goal number to return instructions to distribute sts evenly"""
-    def __init__(self, in_num, st_dif):
+    def __init__(self, st_dif, in_num = None):
         self.in_num = in_num
         self.st_dif = st_dif
         self.st_quotient = self.in_num / self.st_dif
@@ -134,7 +113,7 @@ class Spacing:
             remainder = num_of_rows % self.st_dif
             num_of_inc_rows = int(self.st_dif / 2)
             rows_per_rep = int((num_of_rows - remainder) / num_of_inc_rows)
-            dec_string = f'Work {rows_per_rep + 1} rows. Next row: work 1, increase 1, work to 1 st before end, increase 1, work 1. ' \
+            incdec_string = f'Work {rows_per_rep + 1} rows. Next row: work 1, increase 1, work to 1 st before end, increase 1, work 1. ' \
                    f'Repeat inc row every {rows_per_rep} rows {num_of_inc_rows - 1} times ({num_of_inc_rows} times ' \
                    f'total). Work {remainder} rows.'
         else:
@@ -142,10 +121,73 @@ class Spacing:
             remainder = num_of_rows % self.st_dif
             num_of_dec_rows = int(self.st_dif / 2)
             rows_per_rep = int((num_of_rows - remainder) / num_of_dec_rows)
-            dec_string = f'Work {rows_per_rep + 1} rows. Next row: work 1, decrease 1, work to 1 st before end, decrease, work 1. ' \
+            incdec_string = f'Work {rows_per_rep + 1} rows. Next row: work 1, decrease 1, work to 1 st before end, decrease, work 1. ' \
                    f'Repeat dec row every {rows_per_rep} rows {num_of_dec_rows - 1} times ({num_of_dec_rows} times ' \
                    f'total). Work {remainder} rows.'
-        return dec_string
+        return incdec_string
+
+def inc_sts():
+    while True:
+        try:
+            newans = input("Are you increasing \n(H) on a single row, ie. horizontally? \n"
+                           "(V) over several rows, ie. vertically?")
+            if newans.upper() == 'H':
+                init_num = prompt_for_int("How many stitches do you have before increasing? ")
+                diff_st = prompt_for_int("How many stitches do you want to increase? ")
+                increases_hor = Spacing(diff_st, init_num)
+                print(increases_hor.horizontal_spacing())
+                break
+            elif newans.upper() == 'V':
+                rows = prompt_for_int("How many rows will you being increasing over? ")
+                stitches = prompt_for_int("How many stitches do you want to increase? ")
+                increase_ver = Spacing(st_dif = stitches)
+                print(increase_ver.vertical_spacing(rows))
+                break
+            else:
+                raise Exception
+        except:
+            print("Please choose either H or V.")
+            continue
+
+def dec_sts():
+    while True:
+        try:
+            newans = input("Are you decreasing \n(H) on a single row, ie. horizontally? \n"
+                           "(V) over several rows, ie. vertically?")
+            if newans.upper() == 'H':
+                init_num = prompt_for_int("How many stitches do you have before decreasing? ")
+                diff_st = prompt_for_int("How many stitches do you want to decrease? ") * -1
+                decreases_hor = Spacing(diff_st, init_num)
+                print(decreases_hor.horizontal_spacing())
+                break
+            elif newans.upper() == 'V':
+                rows = prompt_for_int("How many rows will you being decreasing over? ")
+                stitches = prompt_for_int("How many stitches do you want to decrease? ") * -1
+                decrease_ver = Spacing(st_dif = stitches)
+                print(decrease_ver.vertical_spacing(rows))
+                break
+            else:
+                raise Exception
+        except:
+            print("Please choose either H or V.")
+            continue
+
+def run_spacing():
+    while True:
+        try:
+            answer = input("Do you want to increase stitches (I) or decrease stitches (D)?")
+            if answer.upper() == 'I':
+                inc_sts()
+                break
+            elif answer.upper() == 'D':
+                dec_sts()
+                break
+            else:
+                raise Exception
+        except:
+            print("Please choose either I or D.")
+            continue
+
 
 def new_yarn(yardage1, yardage2, num_of_skeins):
     """using the differing yardages, returns changed number of balls/skeins needed. 1 decimal.
@@ -283,19 +325,6 @@ class BustDarts:
                f'Repeat from * to * {self.num_of_turns - 3} times ({self.num_of_turns - 2} times total).\n' \
                f'On the first row after having completed all the dart rows, work remaining wraps together with wrapped st. \n'
 
-def prompt_for_int(question):
-    while True:
-        try:
-            return int(input(question))
-        except:
-            print("Please enter an integer.")
-
-def prompt_for_float(question):
-    while True:
-        try:
-            return int(input(question))
-        except:
-            print("Please enter a number.")
 
 def dart_input():
     print("When taking your measurements, try to wear the bra you plan to wear with the finished garment, "
@@ -381,19 +410,14 @@ def run_socks():
             continue
 
 def run_new_yardage():
-    while True:
-        try:
-            num_of_skeins = int(input("How many skeins/balls of the old yarn do you need? "))
-            old_len = int(input("What is the yardage/meterage (yards or meters per ball/skein) "
-                                "of the original yarn? "))
-            new_len = int(input("What is the yardage/meterage (yards or meters per ball/skein) "
-                                "of the new yarn? "))
-            print(f"You'll need {new_yarn(old_len, new_len, num_of_skeins)} "
+        num_of_skeins = prompt_for_int("How many skeins/balls of the old yarn do you need? ")
+        old_len = prompt_for_int("What is the yardage/meterage (yards or meters per ball/skein) "
+                                "of the original yarn? ")
+        new_len = prompt_for_int("What is the yardage/meterage (yards or meters per ball/skein) "
+                                "of the new yarn? ")
+        print(f"You'll need {new_yarn(old_len, new_len, num_of_skeins)} "
                   f"balls/skeins of your new yarn.")
-            break
-        except:
-            print('Please only use numbers for your answers.')
-            continue
+
 
 while True:
     try:
@@ -409,8 +433,9 @@ while True:
             run_bust_darts()
         elif start_answer == '3':
             run_new_yardage()
+            break
         elif start_answer == '4':
-            print("Let's do that tomorrow, don't you think?")
+            run_spacing()
         else:
             raise Exception
     except:
